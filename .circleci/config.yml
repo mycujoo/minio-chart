@@ -41,7 +41,7 @@ jobs:
   helm_chart:
     <<: *defaults
     docker:
-       - image: mycujoo/gcloud-docker:1.14
+       - image: alpine/helm:3.4.2
     steps:
       - attach_workspace:
           at: /tmp
@@ -58,6 +58,7 @@ jobs:
           command: |
             source .circleci/variables
             cd minio
+            apk add curl
             curl --fail -s -u ${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD} --data-binary @${CHART}.tgz "${CHARTMUSEUM_URL}/api/charts"
 workflows:
   rollout:
