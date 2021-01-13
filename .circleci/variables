@@ -1,5 +1,8 @@
 #!/bin/bash
 
+apk add --no-cache vault libcap curl
+setcap cap_ipc_lock= /usr/sbin/vault
+
 # Export some common vars
 export NAME=${CIRCLE_PROJECT_REPONAME}
 export VERSION=$(cat /tmp/build/circle/build-num)
