@@ -107,7 +107,7 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
-            {{- if and .Values.persistence.enabled Values.persistence.localSSD -}}
+            {{- if and .Values.persistence.enabled .Values.persistence.localSSD -}}
             - name: local-ssd
               mountPath: "/local-ssd/"
             {{- end }}
@@ -198,7 +198,7 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
       volumes:
-        {{- if and .Values.persistence.enabled Values.persistence.localSSD -}}
+        {{- if and .Values.persistence.enabled .Values.persistence.localSSD -}}
           - name: local-ssd
             hostPath:
                 path: /mnt/disks/ssd0
