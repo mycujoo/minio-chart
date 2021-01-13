@@ -57,7 +57,7 @@ jobs:
           command: |
             source .circleci/variables
             cd minio
-            curl --fail -s -u ${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD} --data-binary @${CHART}.tgz "${CHARTMUSEUM_URL}/api/charts"
+            curl --fail -s -u ${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD} --data-binary @${CHART}-${VERSION}.tgz "${CHARTMUSEUM_URL}/api/charts"
 workflows:
   rollout:
     jobs:
