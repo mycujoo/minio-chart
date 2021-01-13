@@ -127,6 +127,9 @@ persistence:
   ## If defined, PVC must be created manually before volume will be bound
   existingClaim: ""
 
+  ## Use GKE local SSD storage Ref: https://cloud.google.com/kubernetes-engine/docs/how-to/persistent-volumes/local-ssd
+  localSSD: ""
+
   ## minio data Persistent Volume Storage Class
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning

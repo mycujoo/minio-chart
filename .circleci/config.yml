@@ -1,0 +1,70 @@
+---
+version: 2.1
+
+workflow_gcp_env_prod: &workflow_gcp_env_prod
+  registry-url: ${GCR_HOSTNAME_PRODUCTION}
+  google-project-id: GOOGLE_PROJECT_ID
+  google-compute-zone: GOOGLE_COMPUTE_ZONE_PRODUCTION
+
+
+orbs:
+  slack: circleci/slack@3.4.2
+  gcp-gcr: circleci/gcp-gcr@0.6.1
+
+workflow_gcp_env: &workflow_gcp_env
+  context: MLS
+  image: ${CIRCLE_PROJECT_REPONAME}
+  requires:
+    - setup_versioning
+
+defaults: &defaults
+  working_directory: /tmp/build
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+
+jobs:
+  setup_versioning:
+    <<: *defaults
+    docker:
+      - image: buildpack-deps:jessie
+    steps:
+      - checkout
+      - run:
+          name: Bootstrap Variables
+          command: |
+            mkdir -p /tmp/build/circle
+            echo ${CIRCLE_BUILD_NUM} > /tmp/build/circle/build-num
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - ./*
+  helm_chart:
+    <<: *defaults
+    docker:
+       - image: mycujoo/gcloud-docker:1.14
+    steps:
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Create Helm Chart
+          command: |
+            source .circleci/variables
+            cd chart/${NAME}
+            helm lint minio
+            helm init --client-only
+            helm package minio --version ${VERSION}
+      - run:
+          name: Upload Helm Chart
+          command: |
+            source .circleci/variables
+            cd minio
+            curl --fail -s -u ${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD} --data-binary @${CHART}.tgz "${CHARTMUSEUM_URL}/api/charts"
+workflows:
+  rollout:
+    jobs:
+      - setup_versioning:
+          context: MLS
+      - helm_chart:
+          context: MLS
+          requires:
+            - setup_versioning

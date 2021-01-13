@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# Export some common vars
+export NAME=${CIRCLE_PROJECT_REPONAME}
+export VERSION=$(cat /tmp/build/circle/build-num)
+
+export CHART=minio
+export CHARTMUSEUM_USERNAME=$(vault read -field=value secret/streaming/chartmuseum/production/username)
+export CHARTMUSEUM_PASSWORD=$(vault read -field=value secret/streaming/chartmuseum/production/password)

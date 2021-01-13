@@ -107,6 +107,10 @@ spec:
           {{- end }}
           {{- end }}
           volumeMounts:
+            {{- if and .Values.persistence.enabled Values.persistence.localSSD -}}
+            - name: local-ssd
+              mountPath: "/local-ssd/"
+            {{- end }}
             {{- if and .Values.persistence.enabled (not .Values.gcsgateway.enabled) (not .Values.azuregateway.enabled) (not .Values.s3gateway.enabled) }}
             - name: export
               mountPath: {{ .Values.mountPath }}
@@ -194,6 +198,11 @@ spec:
 {{ toYaml . | indent 8 }}
 {{- end }}
       volumes:
+        {{- if and .Values.persistence.enabled Values.persistence.localSSD -}}
+          - name: local-ssd
+            hostPath:
+                path: /mnt/disks/ssd0
+        {{- end }}
         {{- if and (not .Values.gcsgateway.enabled) (not .Values.azuregateway.enabled) (not .Values.s3gateway.enabled) }}
         - name: export
         {{- if .Values.persistence.enabled }}
