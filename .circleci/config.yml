@@ -49,10 +49,10 @@ jobs:
           name: Create Helm Chart
           command: |
             source .circleci/variables
-            cd chart/${NAME}
-            helm lint minio
+            cd minio
+            helm lint .
             helm init --client-only
-            helm package minio --version ${VERSION}
+            helm package . --version ${VERSION}
       - run:
           name: Upload Helm Chart
           command: |
