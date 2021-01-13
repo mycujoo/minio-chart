@@ -51,7 +51,6 @@ jobs:
             source .circleci/variables
             cd minio
             helm lint .
-            helm init --client-only
             helm package . --version ${VERSION}
       - run:
           name: Upload Helm Chart
