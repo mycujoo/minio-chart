@@ -57,7 +57,7 @@ jobs:
           command: |
             source .circleci/variables
             cd minio
-            apk add --no-cache vault libcap
+            apk add --no-cache vault libcap curl
             setcap cap_ipc_lock= /usr/sbin/vault
             curl --fail -s -u ${CHARTMUSEUM_USERNAME}:${CHARTMUSEUM_PASSWORD} --data-binary @${CHART}.tgz "${CHARTMUSEUM_URL}/api/charts"
 workflows:
