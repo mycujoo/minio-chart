@@ -14,7 +14,7 @@ metadata:
 spec:
   healthCheck:
     checkIntervalSec: 15
-    port: 9000
+    port: {{ .Values.service.port }}
     type: HTTP
     requestPath: /minio/health/live
 {{- end }}
