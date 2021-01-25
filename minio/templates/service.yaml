@@ -13,7 +13,7 @@ metadata:
     heritage: {{ .Release.Service }}
 {{- if (or (.Values.service.annotations) (.Values.ingress.enabled) ) }}
   annotations:
-    "cloud.google.com/backend-config": '{"default": "{{ template "minio.fullname" . }}"}'
+    cloud.google.com/backend-config: '{"default": "{{ template "minio.fullname" . }}"}'
 {{- if .Values.service.annotations }}
 {{ toYaml .Values.service.annotations | indent 4 }}
 {{- end }}
