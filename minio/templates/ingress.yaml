@@ -17,6 +17,7 @@ metadata:
 
 {{- with .Values.ingress.annotations }}
   annotations:
+    networking.gke.io/managed-certificates: {{ $fullName }}
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
