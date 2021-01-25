@@ -11,9 +11,12 @@ metadata:
     chart: {{ template "minio.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
-{{- if .Values.service.annotations }}
+{{- if (or (.Values.service.annotations) (.Values.ingress.enabled) ) }}
   annotations:
+    "cloud.google.com/backend-config": '{"default": "{{ template "minio.fullname" . }}"}'
+{{- if .Values.service.annotations }}
 {{ toYaml .Values.service.annotations | indent 4 }}
+{{- end }}
 {{- end }}
 spec:
 {{- if (or (eq .Values.service.type "ClusterIP" "") (empty .Values.service.type)) }}

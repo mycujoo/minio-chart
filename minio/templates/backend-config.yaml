@@ -1,0 +1,20 @@
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "minio.fullname" . -}}
+{{- $servicePort := .Values.service.port -}}
+{{- $ingressPath := .Values.ingress.path -}}
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: {{ $fullName }}
+  labels:
+    app: {{ template "minio.name" . }}
+    chart: {{ template "minio.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  healthCheck:
+    checkIntervalSec: 15
+    port: 9000
+    type: HTTP
+    requestPath: /minio/health/live
+{{- end }}
