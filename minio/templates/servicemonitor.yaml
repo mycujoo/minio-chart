@@ -12,6 +12,7 @@ metadata:
   {{- end }}
   labels:
     component: {{ .Release.Name }}
+    app: minio
     release: prometheus-operator
     {{- if .Values.metrics.serviceMonitor.prometheus }}
     prometheus: {{ .Values.metrics.serviceMonitor.prometheus }}
