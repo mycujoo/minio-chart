@@ -11,10 +11,11 @@ metadata:
   namespace: {{ .Values.metrics.serviceMonitor.namespace }}
   {{- end }}
   labels:
-    app: {{ template "minio.name" . }}
-    chart: {{ template "minio.chart" . }}
-    release: {{ .Release.Name }}
-    heritage: {{ .Release.Service }}
+    component: {{ .Release.Name }}
+    release: prometheus-operator
+    {{- if .Values.metrics.serviceMonitor.prometheus }}
+    prometheus: {{ .Values.metrics.serviceMonitor.prometheus }}
+    {{- end }}
     {{- if .Values.metrics.serviceMonitor.additionalLabels }}
 {{ toYaml .Values.metrics.serviceMonitor.additionalLabels | indent 4 }}
     {{- end }}
@@ -34,11 +35,8 @@ spec:
       bearerTokenSecret:
         name: {{ template "minio.fullname" . }}-prometheus
         key: token
-  namespaceSelector:
-    matchNames:
-      - {{ .Release.Namespace | quote }}
+  jobLabel: component
   selector:
     matchLabels:
-      app: {{ include "minio.name" . }}
       release: {{ .Release.Name }}
 {{- end }}
