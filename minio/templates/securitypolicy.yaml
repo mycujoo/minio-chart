@@ -2,6 +2,8 @@
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeSecurityPolicy
 metadata:
+  annotations:
+    cnrm.cloud.google.com/project-id: {{ .Values.googleProjectId }}
   name: {{ template "minio.fullname" . }}-prometheus
   labels:
     app: {{ template "minio.name" . }}

@@ -350,6 +350,9 @@ metrics:
     # interval: 30s
     # scrapeTimeout: 10s
 
+# used for creation cloud security rules
+googleProjectId: ""
+
 ## ETCD settings: https://github.com/minio/minio/blob/master/docs/sts/etcd.md
 ## Define endpoints to enable this section.
 etcd:
