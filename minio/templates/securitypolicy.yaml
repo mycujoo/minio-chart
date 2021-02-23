@@ -12,14 +12,18 @@ metadata:
 spec:
   description: A policy designed to completely lock down network access to prometheus metrics
   rule:
-  - action: deny(403)
+  - action: allow
     priority: 2147483647
     match:
-      versionedExpr: SRC_IPS_V1
-      config:
-        srcIpRanges:
-        - "*"
+      expr:
+        expression: "request.path.matches('/minio/prometheus/') == false"
     description: Rule matching all IPs with priority 2147483647, set to deny.
+  - action: deny
+    priority: 1001
+    match:
+      expr:
+        expression: "request.path.matches('/minio/prometheus/')"
+    description: Deny access to prometheus if IP check fails
   - action: allow
     priority: 1000
     match:
