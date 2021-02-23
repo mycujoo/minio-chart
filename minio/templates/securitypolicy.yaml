@@ -1,9 +1,8 @@
-{{- $fullName := include "minio.fullname" . -}}
 {{- if and .Values.metrics.serviceMonitor.enabled .Values.metrics.serviceMonitor.security.enabled }}
 apiVersion: compute.cnrm.cloud.google.com/v1beta1
 kind: ComputeSecurityPolicy
 metadata:
-  name: {{ $fullName }}-prometheus
+  name: {{ template "minio.fullname" . }}-prometheus
   labels:
     app: {{ template "minio.name" . }}
     chart: {{ template "minio.chart" . }}
