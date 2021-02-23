@@ -339,6 +339,10 @@ serviceAccount:
 metrics:
   # Metrics can not be disabled yet: https://github.com/minio/minio/issues/7493
   serviceMonitor:
+    security:
+        enabled: true
+        whitelist:
+            - 127.0.0.1/32
     enabled: false
     additionalLabels: {}
     relabelConfigs: {}

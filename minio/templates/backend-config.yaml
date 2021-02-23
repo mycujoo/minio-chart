@@ -12,6 +12,10 @@ metadata:
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
+  {{- if .Values.metrics.serviceMonitor.security.enabled }}
+  securityPolicy:
+    name: {{ $fullName }}-prometheus
+  {{- end }}
   healthCheck:
     checkIntervalSec: 15
     port: 9000

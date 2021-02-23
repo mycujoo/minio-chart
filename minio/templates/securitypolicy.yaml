@@ -1,0 +1,33 @@
+{{- $fullName := include "minio.fullname" . -}}
+{{- if and .Values.metrics.serviceMonitor.enabled .Values.metrics.serviceMonitor.security.enabled }}
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeSecurityPolicy
+metadata:
+  name: {{ $fullName }}-prometheus
+  labels:
+    app: {{ template "minio.name" . }}
+    chart: {{ template "minio.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  description: A policy designed to completely lock down network access to prometheus metrics
+  rule:
+  - action: deny(403)
+    priority: 2147483647
+    match:
+      versionedExpr: SRC_IPS_V1
+      config:
+        srcIpRanges:
+        - "*"
+    description: Rule matching all IPs with priority 2147483647, set to deny.
+  - action: allow
+    priority: 1000
+    match:
+      versionedExpr: SRC_IPS_V1
+      config:
+        srcIpRanges:
+      {{- range .Values.metrics.serviceMonitor.security.whitelist }}
+        - {{ . | quote }}
+      {{- end }}
+    description: Whitelisted IP addresses that can reach the prometheus endpoint via the public loadbalancer
+{{- end }}
